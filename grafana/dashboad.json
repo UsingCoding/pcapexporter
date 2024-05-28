@@ -1,0 +1,818 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "code": {
+          "language": "markdown",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Dashboad legend\n\nDataset range - `11:10 - 12:30` UTC\n\n`rate_in` - packages from intranet\n\n`rate_ex` - packages from extranet",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "builder",
+          "format": "table",
+          "rawSql": "",
+          "refId": "A"
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 7,
+      "panels": [],
+      "repeat": "needle",
+      "repeatDirection": "h",
+      "title": "TCP - $needle",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "rate_in",
+                  "rate_ex"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Rate of $needle in ms",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "rate",
+                  "rate_ex",
+                  "rate_in"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n\n\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Rate of $needle at $seq seq",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "rate_ex"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Rate of repeated TCP Retransmissions at $seq seq",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 3,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select \n  seq,\n  count(*) \nfrom record\nWHERE $__timeFilter(`time`)\ngroup by seq\norder by count(*) desc limit 100;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Seq TCP RT",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "id": 5,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "count"
+          ],
+          "show": true
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  `time`,\n  file,\n  `rel-id`\nFROM record\nWHERE $__timeFilter(`time`)\nORDER BY `time`",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Packets records",
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 38,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "2147483647",
+          "value": "2147483647"
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+        },
+        "definition": "select seq from record group by seq;",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Seq",
+        "multi": false,
+        "name": "seq",
+        "options": [],
+        "query": "select seq from record group by seq;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "TCP Retransmission"
+          ],
+          "value": [
+            "TCP Retransmission"
+          ]
+        },
+        "definition": "select data from record group by data",
+        "description": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": true,
+        "name": "needle",
+        "options": [],
+        "query": "select data from record group by data",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2024-05-23T11:01:50.000Z",
+    "to": "2024-05-23T12:50:50.000Z"
+  },
+  "timepicker": {},
+  "timezone": "utc",
+  "title": "Pcap",
+  "uid": "c5077bc2-1317-4feb-82af-b6cd0139539f",
+  "version": 7,
+  "weekStart": ""
+}
