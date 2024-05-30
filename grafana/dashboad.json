@@ -185,7 +185,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -215,7 +215,7 @@
           "format": "time_series",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
           "refId": "B",
           "sql": {
             "columns": [
@@ -352,7 +352,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n\n\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_in`,\n    count(*) rate_in\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -382,7 +382,7 @@
           "format": "time_series",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n\n\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record\nWHERE $__timeFilter(`time`) and data = $needle and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n\n\n",
           "refId": "B",
           "sql": {
             "columns": [
@@ -471,7 +471,8 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "rate_ex"
+                  "rate_ex",
+                  "rate_in"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -519,7 +520,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_in`,\n    count(*) rate_in\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_in`,\n    count(*) rate_in\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -549,7 +550,7 @@
           "format": "table",
           "hide": false,
           "rawQuery": true,
-          "rawSql": "SELECT\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 as `time`,\n    (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000 AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and seq = $seq and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
           "refId": "B",
           "sql": {
             "columns": [
@@ -757,7 +758,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "2147483647",
           "value": "2147483647"
         },
@@ -781,13 +782,17 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
             "TCP Retransmission"
           ],
           "value": [
             "TCP Retransmission"
           ]
+        },
+        "datasource": {
+          "type": "mysql",
+          "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
         },
         "definition": "select data from record group by data",
         "description": "",
@@ -802,6 +807,29 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "ms",
+          "value": "(UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Time Precision",
+        "multi": false,
+        "name": "time_pr",
+        "options": [
+          {
+            "selected": true,
+            "text": "ms",
+            "value": "(UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000"
+          }
+        ],
+        "query": "ms : (UNIX_TIMESTAMP(`time`) DIV 1) + (MICROSECOND(`time`) DIV 1000) / 1000",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },

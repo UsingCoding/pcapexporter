@@ -14,8 +14,9 @@ import (
 )
 
 type Crawler struct {
-	Path   string
-	Result chan Record
+	Path    string
+	CsvPath string
+	Result  chan Record
 }
 
 type Record struct {

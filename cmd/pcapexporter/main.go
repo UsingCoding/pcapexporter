@@ -37,7 +37,6 @@ func runApp(ctx context.Context, args []string) error {
 		Name:    appID,
 		Version: version,
 		Commands: []*cli.Command{
-			csv(),
 			analyzer(),
 		},
 	}
