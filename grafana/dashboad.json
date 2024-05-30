@@ -158,7 +158,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 6
       },
@@ -325,9 +325,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 15
+        "w": 12,
+        "x": 12,
+        "y": 6
       },
       "id": 4,
       "options": {
@@ -471,7 +471,174 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "rate_ex",
+                  "rate_in",
+                  "rate_ex"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_in`,\n    count(*) rate_in\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and src LIKE '10%'\nGROUP BY `time_ms_in`\nORDER BY `time_ms_in`;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "dataset": "pcap",
+          "datasource": {
+            "type": "mysql",
+            "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    $time_pr as `time`,\n    $time_pr AS `time_ms_ex`,\n    count(*) rate_ex\nFROM record_grouped_rt\nWHERE $__timeFilter(`time`) and src NOT LIKE '10%'\nGROUP BY `time_ms_ex`\nORDER BY `time_ms_ex`;\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Rate of repeated TCP Retransmissions",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "a88a36df-288a-4285-95fd-0f88d1dc7445"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
                   "rate_in"
                 ],
                 "prefix": "All except:",
@@ -493,11 +660,11 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 24
+        "w": 12,
+        "x": 12,
+        "y": 15
       },
-      "id": 6,
+      "id": 9,
       "options": {
         "legend": {
           "calcs": [],
@@ -612,7 +779,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 25
       },
       "id": 3,
       "options": {
@@ -700,7 +867,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 34
+        "y": 25
       },
       "id": 5,
       "options": {
@@ -758,7 +925,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "2147483647",
           "value": "2147483647"
         },
@@ -834,13 +1001,13 @@
     ]
   },
   "time": {
-    "from": "2024-05-23T11:01:50.000Z",
-    "to": "2024-05-23T12:50:50.000Z"
+    "from": "2024-05-22T00:00:00.000Z",
+    "to": "2024-05-23T23:59:59.000Z"
   },
   "timepicker": {},
   "timezone": "utc",
   "title": "Pcap",
   "uid": "c5077bc2-1317-4feb-82af-b6cd0139539f",
-  "version": 7,
+  "version": 8,
   "weekStart": ""
 }
